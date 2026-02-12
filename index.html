@@ -1,348 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Surprise 🤍✨</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marwa, Will You Be My Valentine? ❤️</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffeef2;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        h1 {
+            color: #d63384;
+            font-size: 2rem;
+        }
 
-  <style>
-    body { font-family: 'Poppins', sans-serif; }
-    .script { font-family: 'Pacifico', cursive; }
+        #valentine-gif {
+            width: 200px;
+            margin-bottom: 20px;
+        }
 
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+            height: 60px;
+        }
 
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+        button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
-    @keyframes drift {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-    }
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            z-index: 2;
+        }
 
-    @keyframes fall {
-      from { top: -30px; }
-      to { top: 260px; }
-    }
+        #noBtn {
+            background-color: #a0a0a0;
+            color: white;
+            position: absolute;
+            right: 50px;
+        }
 
-    .float { animation: float 3s ease-in-out infinite; }
-    .pop { animation: pop .6s ease-out forwards; }
+        .hidden {
+            display: none;
+        }
 
-    .heart {
-      position: absolute;
-      bottom: -20px;
-      font-size: 20px;
-      color: #ff4da6;
-      animation: drift 8s linear infinite;
-      pointer-events: none;
-    }
-
-    .falling-heart {
-      position: absolute;
-      font-size: 1.8rem;
-      animation: fall 3s linear forwards;
-      pointer-events: none;
-    }
-
-    #bucket {
-      position: absolute;
-      bottom: 6px;
-      font-size: 2.5rem;
-      user-select: none;
-      transition: left 0.1s linear;
-    }
-  </style>
+        #success-msg {
+            color: #ff4d6d;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-gradient-to-br from-white via-pink-100 to-pink-300 min-h-screen overflow-y-auto relative">
+    <div class="container" id="main-card">
+        <!-- Initial GIF -->
+        <img id="valentine-gif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTZ4NnB6cm5ycnNoenAzbTBycDN6NmptdndjNm1hZjN4amZueDJqMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/F6wkRWVCzv24wFezE5/giphy.gif" alt="Cute GIF">
+        
+        <h1 id="question">Marwa, Will you be my Valentine?</h1>
 
-  <!-- Floating Hearts -->
-  <div id="hearts"></div>
-
-  <!-- Background Music -->
-  <audio id="bgm" loop>
-    <source src="music.mp3" type="audio/mpeg" />
-  </audio>
-
-  <!-- LOGIN PAGE -->
-  <section id="login" class="min-h-screen flex items-center justify-center pop">
-    <div class="bg-white/90 backdrop-blur rounded-[2rem] shadow-2xl p-10 max-w-md text-center border border-pink-300">
-      <h1 class="text-4xl font-bold text-pink-600 mb-4 script">Before You Enter 🤍</h1>
-      <p class="text-gray-600 mb-6">Only one name unlocks this page…</p>
-
-      <input
-        id="nameInput"
-        type="text"
-        placeholder="Type your valentine's name"
-        class="w-full px-5 py-3 rounded-full border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center mb-4"
-      />
-
-      <p id="error" class="text-pink-500 hidden">Hmm… that name feels wrong 👀</p>
-      <p class="text-sm text-gray-400 mt-4">Press Enter to continue ✨</p>
-    </div>
-  </section>
-
-  <!-- PAGE 1 : HEART CATCH GAME -->
-  <section id="page1" class="hidden min-h-screen flex flex-col items-center justify-start pt-10 pb-10">
-    <div class="bg-white/90 backdrop-blur rounded-[2rem] shadow-2xl p-8 md:p-12 text-center max-w-md border border-pink-300 relative pop">
-
-      <div class="text-6xl mb-4 float">💖</div>
-      <h1 class="text-4xl font-bold text-pink-600 mb-2 script">Hey Baby🤍</h1>
-      <p class="text-gray-600 text-lg mb-4">
-        Catch all the falling hearts to unlock something special ✨
-      </p>
-
-      <div id="balloonArea" class="relative w-full h-64 bg-pink-50 rounded-2xl mb-6 overflow-hidden">
-        <div id="bucket">🪣</div>
-      </div>
-
-      <div id="proposal" class="hidden pop">
-        <h2 class="text-2xl font-semibold text-pink-500 mb-6">
-          Will you be my Valentine? 🤍
-        </h2>
-
-        <div class="flex justify-center gap-4">
-          <button onclick="sayYes()"
-            class="bg-pink-500 hover:bg-pink-600 text-white px-7 py-3 rounded-full text-lg font-bold transition hover:scale-110 shadow-lg">
-            No 😍
-          </button>
-
-          <button id="noBtn" onmouseover="moveNo()"
-            class="bg-pink-100 text-pink-600 px-7 py-3 rounded-full text-lg font-semibold transition">
-            Yes 🙈
-          </button>
+        <div class="buttons" id="btn-group">
+            <button id="yesBtn">No</button>
+            <button id="noBtn">yes</button>
         </div>
-      </div>
 
-      <div class="mt-4">
-        <button onclick="signOut()"
-          class="bg-pink-400 hover:bg-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition hover:scale-105 shadow-md">
-          Sign Out
-        </button>
-      </div>
+        <div id="success-msg" class="hidden">
+            <p>Yay! Let's not talk on Feb 14th! ❤️</p>
+            <img style="width: 200px;" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4czZ5czZ5czZ5czZ5czZ5czZ5czZ5czZ5czZ5czZ5czZ5czZ5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif">
+        </div>
     </div>
-  </section>
 
-  <!-- PAGE 2 : SPECIAL MESSAGE -->
-  <section id="page2" class="hidden min-h-screen flex flex-col items-center justify-start pt-10 pb-10">
-    <div class="bg-white/90 backdrop-blur rounded-[2rem] shadow-2xl p-10 max-w-lg text-center border border-pink-300 pop">
-      <h2 class="text-4xl font-bold text-pink-600 mb-6 script">For You 🤍</h2>
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
+        const gif = document.getElementById('valentine-gif');
+        const btnGroup = document.getElementById('btn-group');
+        const successMsg = document.getElementById('success-msg');
 
-      <p class="text-gray-700 text-lg leading-relaxed">
-        You have a way of making ordinary moments feel special.
-        Your smile, your kindness, your presence—they mean more to me than you know.
-        I’m grateful for you today and always, and I’m happy to share this love-filled day with you. 💕
-      </p>
+        let yesSize = 1.2;
+        const messages = [
+            "Are you sure?",
+            "Really sure??",
+            "Think again!",
+            "Last chance!",
+            "Surely not?",
+            "You might regret this!",
+            "Give it another thought!",
+            "Are you absolutely sure?",
+            "This could be a mistake!",
+            "Have a heart!",
+            "Don't be so cold!",
+            "Change of heart?",
+            "Wouldn't you reconsider?",
+            "Is that your final answer?",
+            "You're breaking my heart ;("
+        ];
 
-      <p class="mt-8 text-2xl font-semibold text-pink-500">
-        Happy Valentine’s Day ✨
-      </p>
+        let msgIndex = 0;
 
-      <button onclick="goToGiftPage()"
-        class="mt-6 bg-pink-500 hover:bg-pink-600 text-white px-7 py-3 rounded-full text-lg font-semibold transition hover:scale-110 shadow-lg">
-        Continue 💕
-      </button>
-    </div>
-  </section>
+        // 1. Move the NO button when hovered
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
 
-  <!-- PAGE 3 : GIFT PREFERENCE -->
-  <section id="page3" class="hidden min-h-screen flex flex-col items-center justify-start pt-10 pb-10">
-    <div class="bg-white/90 backdrop-blur rounded-[2rem] shadow-2xl p-10 max-w-lg text-center border border-pink-300 pop">
+            // 2. Make the YES button bigger every time they try to click NO
+            yesSize += 0.3;
+            yesBtn.style.transform = `scale(${yesSize})`;
 
-      <h2 class="text-4xl font-bold text-pink-600 mb-4 script">
-        One More Thing 🤍
-      </h2>
+            // 3. Change the NO button text to be more persuasive
+            noBtn.innerText = messages[msgIndex % messages.length];
+            msgIndex++;
+        });
 
-      <p class="text-gray-600 mb-6">
-        Tell me what gift would make you smile the most ✨
-      </p>
-
-      <textarea
-        id="giftInput"
-        rows="4"
-        placeholder="I would love something like… 💝"
-        class="w-full p-4 rounded-2xl border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none text-gray-700"
-      ></textarea>
-
-      <button onclick="submitGift()"
-        class="mt-6 bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full text-lg font-bold transition hover:scale-110 shadow-lg">
-        Submit 💌
-      </button>
-
-      <p id="giftThanks" class="hidden mt-6 text-pink-500 font-semibold text-lg">
-        Noted with love 🤍✨
-      </p>
-
-      <div class="mt-6">
-        <button onclick="signOut()"
-          class="bg-pink-400 hover:bg-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition hover:scale-105 shadow-md">
-          Sign Out
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- SCRIPT -->
-  <script>
-    const correctName = "Najlae";
-    const input = document.getElementById('nameInput');
-    const error = document.getElementById('error');
-    const music = document.getElementById('bgm');
-
-    const balloonArea = document.getElementById('balloonArea');
-    const proposal = document.getElementById('proposal');
-    const bucket = document.getElementById('bucket');
-
-    let heartsCaught = 0;
-    const heartsNeeded = 6;
-    let gameInterval;
-
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        if (input.value.trim().toLowerCase() === correctName.toLowerCase()) {
-          document.getElementById('login').classList.add('hidden');
-          document.getElementById('page1').classList.remove('hidden');
-          music.play();
-          startGame();
-        } else {
-          error.classList.remove('hidden');
-        }
-      }
-    });
-
-    function startGame() {
-      balloonArea.querySelectorAll('.falling-heart').forEach(h => h.remove());
-      proposal.classList.add('hidden');
-      heartsCaught = 0;
-      bucket.style.left = '40%';
-      clearInterval(gameInterval);
-      gameInterval = setInterval(createFallingHeart, 900);
-    }
-
-    function createFallingHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'falling-heart';
-      heart.textContent = '💖';
-      heart.style.left = Math.random() * 90 + '%';
-      balloonArea.appendChild(heart);
-
-      const checkCatch = setInterval(() => {
-        const hRect = heart.getBoundingClientRect();
-        const bRect = bucket.getBoundingClientRect();
-
-        if (
-          hRect.bottom >= bRect.top &&
-          hRect.left < bRect.right &&
-          hRect.right > bRect.left
-        ) {
-          heart.remove();
-          clearInterval(checkCatch);
-          heartsCaught++;
-
-          if (heartsCaught >= heartsNeeded) {
-            clearInterval(gameInterval);
-            proposal.classList.remove('hidden');
-          }
-        }
-
-        if (hRect.top > window.innerHeight) {
-          heart.remove();
-          clearInterval(checkCatch);
-        }
-      }, 50);
-    }
-
-    balloonArea.addEventListener('mousemove', e => {
-      const rect = balloonArea.getBoundingClientRect();
-      let x = e.clientX - rect.left - 20;
-      x = Math.max(0, Math.min(x, rect.width - 40));
-      bucket.style.left = x + 'px';
-    });
-
-    function sayYes() {
-      document.getElementById('page1').classList.add('hidden');
-      document.getElementById('page2').classList.remove('hidden');
-    }
-
-    function goToGiftPage() {
-      document.getElementById('page2').classList.add('hidden');
-      document.getElementById('page3').classList.remove('hidden');
-    }
-
-   function submitGift() {
-  const gift = document.getElementById('giftInput').value.trim();
-
-  if (gift !== "") {
-
-    // إخفاء مربع الكتابة والزر
-    document.getElementById('giftInput').style.display = "none";
-
-    // إزالة أي رسالة موجودة مسبقًا
-    const oldMessage = document.querySelector("#page3 .giftMessage");
-    if (oldMessage) oldMessage.remove();
-
-    // إنشاء رسالة جديدة
-    const message = document.createElement("div");
-    message.className = "mt-6 text-pink-600 text-xl font-semibold pop giftMessage";
-    message.innerHTML = `
-      Aww 🥹🤍<br><br>
-      So you want: <span class="text-pink-500 font-bold">"${gift}"</span> 💝<br><br>
-      Consider it done, my love ✨💖
-    `;
-
-    document.querySelector("#page3 .bg-white\\/90").appendChild(message);
-
-    // القلوب الاحتفالية
-    for (let i = 0; i < 15; i++) {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = Math.random() * 20 + 20 + 'px';
-      heart.textContent = '💖';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }
-  }
-}
-
-    function moveNo() {
-      const btn = document.getElementById('noBtn');
-      btn.style.transform =
-        `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
-    }
-
-    function signOut() {
-      document.getElementById('page1').classList.add('hidden');
-      document.getElementById('page2').classList.add('hidden');
-      document.getElementById('page3').classList.add('hidden');
-      document.getElementById('login').classList.remove('hidden');
-      music.pause();
-      music.currentTime = 0;
-      input.value = '';
-      error.classList.add('hidden');
-    }
-
-    const hearts = document.getElementById('hearts');
-    setInterval(() => {
-      const h = document.createElement('div');
-      h.className = 'heart';
-      h.style.left = Math.random() * 100 + 'vw';
-      h.style.fontSize = Math.random() * 16 + 16 + 'px';
-      h.textContent = '💖';
-      hearts.appendChild(h);
-      setTimeout(() => h.remove(), 8000);
-    }, 500);
-  </script>
-
+        // 4. Handle YES click
+        yesBtn.addEventListener('click', () => {
+            question.classList.add('hidden');
+            btnGroup.classList.add('hidden');
+            gif.classList.add('hidden');
+            successMsg.classList.remove('hidden');
+        });
+    </script>
 </body>
 </html>
